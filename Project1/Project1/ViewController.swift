@@ -18,20 +18,9 @@ class ViewController: UITableViewController {
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(recommendTapped))
 
-        let fm = FileManager.default
-        let path = Bundle.main.resourcePath!
-        let items = try! fm.contentsOfDirectory(atPath: path)
-
-        for item in items {
-            if item.hasPrefix("nssl") {
-                // this is a picture to load
-                pictures.append(item)
-            }
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            self?.loadImages()
         }
-
-        pictures.sort()
-
-        print(pictures)
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -58,5 +47,26 @@ class ViewController: UITableViewController {
         let vc = UIActivityViewController(activityItems: [recommendation], applicationActivities: [])
         vc.popoverPresentationController?.barButtonItem = navigationItem.rightBarButtonItem
         present(vc, animated: true)
+    }
+
+    fileprivate func loadImages() {
+        let fm = FileManager.default
+        let path = Bundle.main.resourcePath!
+        let items = try! fm.contentsOfDirectory(atPath: path)
+
+        for item in items {
+            if item.hasPrefix("nssl") {
+                // this is a picture to load
+                pictures.append(item)
+            }
+        }
+
+        pictures.sort()
+
+        print(pictures)
+
+        DispatchQueue.main.async { [weak self] in
+            self?.tableView.reloadData()
+        }
     }
 }

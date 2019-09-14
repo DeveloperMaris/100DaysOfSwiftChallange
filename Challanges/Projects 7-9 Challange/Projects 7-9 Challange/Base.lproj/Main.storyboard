@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+    <device id="retina6_1" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--View Controller-->
+        <scene sceneID="tne-QT-ifu">
+            <objects>
+                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="Projects_7_9_Challange" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Guesses left: 0" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="b9g-YK-aDA">
+                                <rect key="frame" x="297" y="64" width="97" height="17"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="??????" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HXf-iR-6Bj">
+                                <rect key="frame" x="20" y="101" width="374" height="38.5"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="32"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Jo9-fF-wP2">
+                                <rect key="frame" x="152" y="812" width="110" height="30"/>
+                                <state key="normal" title="Guess the letter"/>
+                                <connections>
+                                    <action selector="guessALetterTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="nbv-gE-aco"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="b9g-YK-aDA" secondAttribute="trailing" constant="20" id="6jb-Ps-2iL"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="Jo9-fF-wP2" secondAttribute="bottom" constant="20" id="Dji-sd-QuT"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="HXf-iR-6Bj" secondAttribute="trailing" constant="20" id="Qy5-KG-p1Z"/>
+                            <constraint firstItem="Jo9-fF-wP2" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="UBT-Bc-rGW"/>
+                            <constraint firstItem="b9g-YK-aDA" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="20" id="dyV-nd-98s"/>
+                            <constraint firstItem="Jo9-fF-wP2" firstAttribute="top" relation="greaterThanOrEqual" secondItem="HXf-iR-6Bj" secondAttribute="bottom" constant="10" id="w41-a0-hSN"/>
+                            <constraint firstItem="HXf-iR-6Bj" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="20" id="x57-dY-Zhr"/>
+                            <constraint firstItem="HXf-iR-6Bj" firstAttribute="top" secondItem="b9g-YK-aDA" secondAttribute="bottom" constant="20" id="xnA-nS-aHP"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
+                    </view>
+                    <connections>
+                        <outlet property="scoreLabel" destination="b9g-YK-aDA" id="5C9-l0-p2A"/>
+                        <outlet property="wordLabel" destination="HXf-iR-6Bj" id="BhB-RH-xfP"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+            </objects>
+        </scene>
+    </scenes>
+</document>
