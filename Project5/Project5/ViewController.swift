@@ -28,12 +28,28 @@ class ViewController: UITableViewController {
             allWords = ["silkworm"]
         }
 
-        startGame()
+        if continuePreviousGame() {
+            loadPreviousGame()
+        } else {
+            startGame()
+        }
+    }
+
+    func continuePreviousGame() -> Bool {
+        let defaults = UserDefaults.standard
+        return defaults.object(forKey: "CurrentWord") != nil
+    }
+
+    func loadPreviousGame() {
+        let defaults = UserDefaults.standard
+        title = defaults.string(forKey: "CurrentWord")
+        usedWords = defaults.object(forKey: "UsedWords") as? [String] ?? [String]()
     }
 
     @objc func startGame() {
         title = allWords.randomElement()
         usedWords.removeAll(keepingCapacity: true)
+        save()
         tableView.reloadData()
     }
 
@@ -71,6 +87,7 @@ class ViewController: UITableViewController {
             if isOriginal(word: lowerAnswer) {
                 if isReal(word: lowerAnswer) {
                     usedWords.insert(lowerAnswer, at: 0)
+                    save()
 
                     let indexPath = IndexPath(row: 0, section: 0)
                     tableView.insertRows(at: [indexPath], with: .automatic)
@@ -125,5 +142,11 @@ class ViewController: UITableViewController {
         let ac = UIAlertController(title: title, message: message, preferredStyle: .alert)
         ac.addAction(UIAlertAction(title: "OK", style: .default))
         present(ac, animated: true)
+    }
+
+    func save() {
+        let defaults = UserDefaults.standard
+        defaults.set(title, forKey: "CurrentWord")
+        defaults.set(usedWords, forKey: "UsedWords")
     }
 }

@@ -40,7 +40,19 @@ class ViewController: UIViewController {
         navigationItem.prompt = "Your score is \(score)"
 
         guard askedQuestions < 10 else {
-            let ac = UIAlertController(title: "Congratulations", message: "Your final score is \(score)", preferredStyle: .alert)
+            let title: String
+            let message: String
+
+            if score > highscore() {
+                save(score)
+                title = "Congratulations"
+                message = "Your new Highscore and final score is \(score)"
+            } else {
+                title = "Congratulations"
+                message = "Your final score is \(score)"
+            }
+
+            let ac = UIAlertController(title: title, message: message, preferredStyle: .alert)
             ac.addAction(UIAlertAction(title: "Restart game", style: .default, handler: restart))
             present(ac, animated: true)
             return
@@ -89,5 +101,15 @@ class ViewController: UIViewController {
         let ac = UIAlertController(title: nil, message: "Your score is \(score)", preferredStyle: .alert)
         ac.addAction(UIAlertAction(title: "Continue", style: .default))
         present(ac, animated: true)
+    }
+
+    func save(_ score: Int) {
+        let defaults = UserDefaults.standard
+        defaults.set(score, forKey: "Highscore")
+    }
+
+    func highscore() -> Int {
+        let defaults = UserDefaults.standard
+        return defaults.integer(forKey: "Highscore")
     }
 }
