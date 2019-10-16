@@ -1,0 +1,47 @@
+[
+    {
+        "name": "Russia",
+        "size": {
+            "total": 17098246,
+            "land": 16377742,
+            "water": 720500
+        },
+        "note": "Largest country in the world (10.995% of the world's land mass); its Asian portion makes it the largest country in Asia, and its European portion of roughly 3,960,000 km2 (1,530,000 sq mi) makes it the largest country in Europe."
+    },
+    {
+        "name": "Antarctica",
+        "size": {
+            "total": 14000000,
+            "land": 14000000,
+            "water": 0
+        },
+        "note": "13,720,000 km2 (5,300,000 sq mi) (98%) of the land area is covered by ice. Though not itself a country, areas are claimed by a number of countries."
+    },
+    {
+        "name": "Canada",
+        "size": {
+            "total": 9984670,
+            "land": 9093507,
+            "water": 891163
+        },
+        "note": "Largest English and French-speaking country and the largest country completely in the Western Hemisphere by total area (second-largest by land area, after the United States), with the largest surface area of water. Total area and water area figures include area covered by freshwater only, and do not include internal waters (non-freshwater) of about 1,600,000 km2, or territorial waters of 200,000 km2."
+    },
+    {
+        "name": "China",
+        "size": {
+            "total": 9596961,
+            "land": 9326410,
+            "water": 270550
+        },
+        "note": "Second-largest country in Asia (though the largest located wholly within the continent), and second-largest country in the world by land area. Excludes Taiwan, disputed territories with India, and disputed islands in the South China Sea. Figures for total area and water area also exclude all coastal and territorial waters."
+    },
+    {
+        "name": "United States",
+        "size": {
+            "total": 9525067,
+            "land": 9147593,
+            "water": 377424
+        },
+        "note": "Largest country in the English-speaking world and the Western Hemisphere by land area (second-largest by total area, after Canada). Secondary figures for total area and water area denote the inclusion of all coastal and territorial waters into the statistical area."
+    }
+]
