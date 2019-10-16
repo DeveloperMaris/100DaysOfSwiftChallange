@@ -16,6 +16,9 @@ class CountryListTableViewController: UITableViewController {
         super.viewDidLoad()
 
         title = "Facts about Countries"
+
+        // Hack to not show extra blank rows
+        tableView.tableFooterView = UIView()
         
         DispatchQueue.global(qos: .userInitiated).async { [unowned self] in
             self.countries = self.loadCountries()

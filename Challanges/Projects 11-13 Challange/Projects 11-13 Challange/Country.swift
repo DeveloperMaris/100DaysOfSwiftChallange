@@ -19,5 +19,3 @@ struct Country: Codable {
     let size: Size
     let note: String?
 }
-
-

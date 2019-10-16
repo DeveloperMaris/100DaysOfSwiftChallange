@@ -21,15 +21,16 @@ class CountryDetailsTableViewController: UITableViewController {
 
         assert(country != nil, "Country object is required!")
 
+        // Hack to not show extra blank rows
         tableView.tableFooterView = UIView()
 
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(shareTapped))
 
         title = country.name
 
-        landAreaLabel.text = formatMeasurement(country.size.land)
-        waterAreaLabel.text = formatMeasurement(country.size.water)
-        totalAreaLabel.text = formatMeasurement(country.size.total)
+        landAreaLabel.text = formatMeasurement(Double(country.size.land))
+        waterAreaLabel.text = formatMeasurement(Double(country.size.water))
+        totalAreaLabel.text = formatMeasurement(Double(country.size.total))
 
         notesLabel.text = country.note ?? "-"
     }
@@ -41,9 +42,9 @@ class CountryDetailsTableViewController: UITableViewController {
         present(vc, animated: true)
     }
 
-    private func formatMeasurement(_ size: Int) -> String {
+    private func formatMeasurement(_ size: Double) -> String {
         let formatter = MeasurementFormatter()
         formatter.unitStyle = .medium
-        return formatter.string(from: Measurement(value: Double(size), unit: UnitArea.squareKilometers))
+        return formatter.string(from: Measurement(value: size, unit: UnitArea.squareKilometers))
     }
 }
