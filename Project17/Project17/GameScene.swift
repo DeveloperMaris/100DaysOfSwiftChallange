@@ -9,13 +9,18 @@
 import SpriteKit
 
 class GameScene: SKScene {
+    static let enemyLimitInRound: Int = 20
+
     var starfield: SKEmitterNode!
     var player: SKSpriteNode!
     var scoreLabel: SKLabelNode!
 
     var possibleEnemies: [String] = ["ball", "hammer", "tv"]
     var gameTimer: Timer?
+    var enemyCreationTime: TimeInterval = 1.0
     var isGameOver: Bool = false
+    var canMovePlayer: Bool = true
+    var enemiesCreatedInRound: Int = 0
 
     var score = 0 {
         didSet {
@@ -49,7 +54,7 @@ class GameScene: SKScene {
         physicsWorld.gravity = .zero
         physicsWorld.contactDelegate = self
 
-        gameTimer = Timer.scheduledTimer(timeInterval: 0.35, target: self, selector: #selector(createEnemy), userInfo: nil, repeats: true)
+        gameTimer = Timer.scheduledTimer(timeInterval: enemyCreationTime, target: self, selector: #selector(playRound), userInfo: nil, repeats: true)
     }
     
     override func update(_ currentTime: TimeInterval) {
@@ -63,9 +68,14 @@ class GameScene: SKScene {
     }
 
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+        guard canMovePlayer else {
+            return
+        }
+
         guard let touch = touches.first else {
             return
         }
+
         var location = touch.location(in: self)
 
         if location.y < 100 {
@@ -75,6 +85,29 @@ class GameScene: SKScene {
         }
 
         player.position = location
+    }
+
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        canMovePlayer = false
+    }
+
+    @objc
+    private func playRound() {
+        guard !isGameOver else {
+            gameTimer?.invalidate()
+            return
+        }
+        resetRoundIfNecessary()
+        createEnemy()
+    }
+
+    private func resetRoundIfNecessary() {
+        if enemiesCreatedInRound == Self.enemyLimitInRound && enemyCreationTime > 0.1 {
+            gameTimer?.invalidate()
+            enemyCreationTime -= 0.1
+            enemiesCreatedInRound = 0
+            gameTimer = Timer.scheduledTimer(timeInterval: enemyCreationTime, target: self, selector: #selector(playRound), userInfo: nil, repeats: true)
+        }
     }
 
     @objc
@@ -92,6 +125,8 @@ class GameScene: SKScene {
         sprite.physicsBody?.angularVelocity = 5 // Constant spin (gives spin)
         sprite.physicsBody?.linearDamping = 0 // Means how fast things slow down over time (slow down never)
         sprite.physicsBody?.angularDamping = 0 // Gives that thing will never stop spinning
+
+        enemiesCreatedInRound += 1
     }
 }
 
