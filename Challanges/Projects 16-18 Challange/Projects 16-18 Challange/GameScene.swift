@@ -25,37 +25,27 @@ class GameScene: SKScene {
     var isGameOver: Bool {
         return remainingTime == 0
     }
+    
     var targetTimer: Timer?
     var gameTimer: Timer?
 
+    var freeRows: [Row] = [.first, .second, .third]
+
     override func didMove(to view: SKView) {
-        let background = SKSpriteNode(imageNamed: "wood-background")
-        background.position = CGPoint(x: 400, y: 300)
-        background.blendMode = .replace
-        background.zPosition = -1
-        addChild(background)
-
-        scoreLabel = SKLabelNode(fontNamed: "Chalkduster")
-        scoreLabel.position = CGPoint(x: 20, y: 560)
-        scoreLabel.horizontalAlignmentMode = .left
-        addChild(scoreLabel)
-
-        score = 0
-
-        remainingTimeLabel = SKLabelNode(fontNamed: "Chalkduster")
-        remainingTimeLabel.position = CGPoint(x: 760, y: 560)
-        remainingTimeLabel.horizontalAlignmentMode = .right
-        addChild(remainingTimeLabel)
-
-        remainingTime = 60
-
-        targetTimer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(createTarget), userInfo: nil, repeats: true)
-        gameTimer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(gameCountdown), userInfo: nil, repeats: true)
+        createBackground()
+        createScoreLabel()
+        createRemainingTimeLabel()
+        startTimers()
+        createTarget()
     }
 
     override func update(_ currentTime: TimeInterval) {
-        for node in children where node.position.x < Position.Side.minPoint || node.position.x > Position.Side.maxPoint {
+        for node in children where node.position.x < Row.minPoint || node.position.x > Row.maxPoint {
             node.removeFromParent()
+            if let target = node as? Target {
+                freeRows.append(target.row)
+                createTarget()
+            }
         }
     }
 
@@ -73,19 +63,61 @@ class GameScene: SKScene {
             score += 1
         }
     }
+}
 
-    @objc
-    private func createTarget() {
-        let targetPosition = Position.randomPosition()
+private extension GameScene {
+    func createBackground() {
+        let background = SKSpriteNode(imageNamed: "wood-background")
+        background.position = CGPoint(x: 400, y: 300)
+        background.blendMode = .replace
+        background.zPosition = -1
+        addChild(background)
+    }
 
-        let target = Target()
-        target.configure(at: targetPosition.initialPosition)
-        addChild(target)
-        target.move(to: targetPosition.distanceToMove)
+    func createScoreLabel() {
+        scoreLabel = SKLabelNode(fontNamed: "Chalkduster")
+        scoreLabel.position = CGPoint(x: 20, y: 560)
+        scoreLabel.horizontalAlignmentMode = .left
+        addChild(scoreLabel)
+
+        score = 0
+    }
+
+    func createRemainingTimeLabel() {
+        remainingTimeLabel = SKLabelNode(fontNamed: "Chalkduster")
+        remainingTimeLabel.position = CGPoint(x: 760, y: 560)
+        remainingTimeLabel.horizontalAlignmentMode = .right
+        addChild(remainingTimeLabel)
+
+        remainingTime = 60
+    }
+
+    func startTimers() {
+        targetTimer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(createTarget), userInfo: nil, repeats: true)
+        gameTimer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(gameCountdown), userInfo: nil, repeats: true)
     }
 
     @objc
-    private func gameCountdown() {
+    func createTarget() {
+        guard !isGameOver else {
+            return
+        }
+
+        guard freeRows.count > 0 else {
+            return
+        }
+
+        freeRows.shuffle()
+        let row = freeRows.removeFirst()
+
+        let target = Target()
+        target.configure(at: row)
+        addChild(target)
+        target.move()
+    }
+
+    @objc
+    func gameCountdown() {
         remainingTime -= 1
 
         guard isGameOver else {

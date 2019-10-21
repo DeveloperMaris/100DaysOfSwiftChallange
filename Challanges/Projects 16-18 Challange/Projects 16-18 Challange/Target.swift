@@ -11,12 +11,14 @@ import UIKit
 
 class Target: SKNode {
     private let possibleTargetSkins: [String] = ["target0", "target1"]
-
     private var targetNode: SKSpriteNode!
+    
+    var row: Row!
     var isHit: Bool = false
 
-    func configure(at position: CGPoint) {
-        self.position = position
+    func configure(at row: Row) {
+        self.row = row
+        self.position = row.initialPosition()
 
         guard let targetImage = possibleTargetSkins.randomElement() else {
             return
@@ -28,8 +30,9 @@ class Target: SKNode {
         addChild(targetNode)
     }
 
-    func move(to point: CGFloat) {
+    func move() {
         assert(targetNode != nil, "Target node must exist!")
+        assert(row != nil, "Row must be provided!")
 
         let scale = CGFloat.random(in: 0.3...1)
         let speed = TimeInterval(scale) * 5
@@ -37,7 +40,7 @@ class Target: SKNode {
         targetNode.xScale = scale
         targetNode.yScale = scale
 
-        run(SKAction.moveBy(x: point, y: 0, duration: speed))
+        run(SKAction.moveBy(x: row.destination(), y: 0, duration: speed))
     }
 
     func hit() {

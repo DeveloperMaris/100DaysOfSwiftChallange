@@ -8,47 +8,29 @@
 
 import UIKit
 
-struct Position {
-    enum Side: CaseIterable {
-        static let minPoint: CGFloat = -100
-        static let maxPoint: CGFloat = 900
+enum Row: CaseIterable {
+    static let minPoint: CGFloat = -100
+    static let maxPoint: CGFloat = 900
 
-        case left, right
-    }
+    case first, second, third
 
-    enum Row: CaseIterable {
-        case first, second, third
-
-        func position(on side: Side) -> CGPoint {
-            let initialPoint = side == .left ? Side.minPoint : Side.maxPoint
-            switch self {
-            case .first:
-                return CGPoint(x: initialPoint, y: 450)
-            case .second:
-                return CGPoint(x: initialPoint, y: 300)
-            case .third:
-                return CGPoint(x: initialPoint, y: 150)
-            }
+    func initialPosition() -> CGPoint {
+        switch self {
+        case .first:
+            return CGPoint(x: Self.minPoint, y: 450)
+        case .second:
+            return CGPoint(x: Self.maxPoint, y: 300)
+        case .third:
+            return CGPoint(x: Self.minPoint, y: 150)
         }
     }
 
-    let row: Row
-    let initialPosition: CGPoint
-    let distanceToMove: CGFloat
-
-    private init(row: Row, initialPosition: CGPoint, distanceToMove: CGFloat) {
-        self.row = row
-        self.initialPosition = initialPosition
-        self.distanceToMove = distanceToMove
-    }
-
-
-    static func randomPosition() -> Position {
-        let row = Row.allCases.randomElement()!
-        let initialSide = Side.allCases.randomElement()!
-        let initialPosition = row.position(on: initialSide)
-        let distanceToMove: CGFloat = initialSide == .left ? 1100 : -1100
-
-        return Position(row: row, initialPosition: initialPosition, distanceToMove: distanceToMove)
+    func destination() -> CGFloat {
+        switch self {
+        case .first, .third:
+            return 1100
+        case .second:
+            return -1100
+        }
     }
 }
