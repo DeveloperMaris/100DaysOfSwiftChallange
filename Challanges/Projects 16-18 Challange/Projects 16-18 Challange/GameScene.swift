@@ -25,7 +25,7 @@ class GameScene: SKScene {
     var isGameOver: Bool {
         return remainingTime == 0
     }
-    
+
     var targetTimer: Timer?
     var gameTimer: Timer?
 
