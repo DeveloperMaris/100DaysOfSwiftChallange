@@ -18,22 +18,17 @@ class ScriptManager {
 
     init(userDefaults: UserDefaults = UserDefaults.standard) {
         self.userDefaults = userDefaults
-        scripts = loadScripts()
+        queue.async(flags: .barrier) { [weak self] in
+            guard let self = self else { return }
+            self.scripts = self.getScripts()
+        }
     }
+
+
 
     func loadScripts() -> [Script] {
         queue.sync {
-            let savedScriptsData = self.userDefaults.data(forKey: Self.savedScriptsKey)
-            var savedScripts: [Script] = []
-
-            if let data = savedScriptsData {
-                let decoder = JSONDecoder()
-                if let scripts = try? decoder.decode([Script].self, from: data) {
-                    savedScripts = scripts
-                }
-            }
-
-            return savedScripts
+            return self.getScripts()
         }
     }
 
@@ -49,5 +44,19 @@ class ScriptManager {
                 self.userDefaults.set(dataToSave, forKey: Self.savedScriptsKey)
             }
         }
+    }
+
+    private func getScripts() -> [Script] {
+        let savedScriptsData = self.userDefaults.data(forKey: Self.savedScriptsKey)
+        var savedScripts: [Script] = []
+
+        if let data = savedScriptsData {
+            let decoder = JSONDecoder()
+            if let scripts = try? decoder.decode([Script].self, from: data) {
+                savedScripts = scripts
+            }
+        }
+
+        return savedScripts
     }
 }
