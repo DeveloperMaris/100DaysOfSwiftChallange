@@ -21,6 +21,8 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        registerLoaclNotification()
+
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(scoreTapped))
 
         countries += ["estonia", "france", "germany", "ireland", "italy", "monaco", "nigeria", "poland", "russia", "spain", "uk", "us"]
@@ -119,5 +121,44 @@ class ViewController: UIViewController {
     func highscore() -> Int {
         let defaults = UserDefaults.standard
         return defaults.integer(forKey: "Highscore")
+    }
+}
+
+// MARK: - Notifications
+private extension ViewController {
+    func scheduleLocalNotification() {
+        let center = UNUserNotificationCenter.current()
+        center.removeAllPendingNotificationRequests()
+
+        let content = UNMutableNotificationContent()
+        content.title = "Lets play?"
+        content.body = "You haven't played this game for a while, maybe wanna play it now?"
+        content.categoryIdentifier = "alarm"
+        content.sound = .default
+
+        let date = Date()
+        let calendar = Calendar.current
+
+        guard let triggerDate = calendar.date(byAdding: .second, value: 14, to: date) else {
+            return
+        }
+
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: triggerDate.timeIntervalSinceNow, repeats: false)
+
+        let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
+        center.add(request)
+    }
+
+    func registerLoaclNotification() {
+        let center = UNUserNotificationCenter.current()
+
+        center.requestAuthorization(options: [.alert, .badge, .sound]) { [weak self] granted, error in
+            if granted {
+                print("Access to notifications granted")
+                self?.scheduleLocalNotification()
+            } else {
+                print("Access to notifications not allowed")
+            }
+        }
     }
 }
