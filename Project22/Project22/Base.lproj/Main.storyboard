@@ -21,15 +21,26 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="-" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kym-Ov-Quq">
+                                <rect key="frame" x="20" y="497" width="374" height="19.5"/>
+                                <fontDescription key="fontDescription" type="system" weight="thin" pointSize="16"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
                             <constraint firstItem="x8Z-dk-XbO" firstAttribute="centerY" secondItem="6Tk-OE-BBY" secondAttribute="centerY" id="5n1-xY-hxm"/>
+                            <constraint firstItem="kym-Ov-Quq" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="20" id="TQL-3s-W5G"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="kym-Ov-Quq" secondAttribute="trailing" constant="20" id="eTU-ol-KPL"/>
                             <constraint firstItem="x8Z-dk-XbO" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="is8-KV-Fz4"/>
+                            <constraint firstItem="kym-Ov-Quq" firstAttribute="top" secondItem="x8Z-dk-XbO" secondAttribute="bottom" constant="20" id="mmc-9o-tem"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="kym-Ov-Quq" secondAttribute="bottom" constant="20" id="py8-v6-94S"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <connections>
+                        <outlet property="detectedBeacon" destination="kym-Ov-Quq" id="yln-tO-eeR"/>
                         <outlet property="distanceReading" destination="x8Z-dk-XbO" id="TlG-5o-ce1"/>
                     </connections>
                 </viewController>
