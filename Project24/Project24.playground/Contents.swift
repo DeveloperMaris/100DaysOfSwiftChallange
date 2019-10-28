@@ -94,3 +94,47 @@ attributedString.addAttribute(.font, value: UIFont.systemFont(ofSize: 16), range
 attributedString.addAttribute(.font, value: UIFont.systemFont(ofSize: 24), range: NSRange(location: 8, length: 1))
 attributedString.addAttribute(.font, value: UIFont.systemFont(ofSize: 32), range: NSRange(location: 10, length: 4))
 attributedString.addAttribute(.font, value: UIFont.systemFont(ofSize: 40), range: NSRange(location: 15, length: 6))
+
+// -----------------------------------------------------------------------------------------------------------------------------------------------
+
+let word = "troll"
+
+extension String {
+    func withPrefix(_ prefix: String) -> String {
+        guard !self.hasPrefix(prefix) else { return self }
+        return prefix + self
+    }
+}
+
+word.withPrefix("Mumi")
+word.withPrefix("tr")
+
+// -----------------------------------------------------------------------------------------------------------------------------------------------
+
+let number = "64.0"
+
+extension String {
+
+    /// Check if a string can be represented as a numberic value
+    var isNumberic: Bool {
+        return Double(self) != nil
+    }
+}
+
+number.isNumberic
+
+// -----------------------------------------------------------------------------------------------------------------------------------------------
+
+let paragraph = """
+Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.
+It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.
+"""
+
+extension String {
+    var lines: [String] {
+        return self.components(separatedBy: "\n")
+    }
+}
+
+paragraph.lines
