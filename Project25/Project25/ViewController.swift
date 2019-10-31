@@ -14,7 +14,8 @@ class ViewController: UICollectionViewController {
 
     var peerID = MCPeerID(displayName: UIDevice.current.name)
     var mcSession: MCSession?
-    var mcAdvertiserAssistant: MCAdvertiserAssistant?
+//    var mcAdvertiserAssistant: MCAdvertiserAssistant? // Not working in iOS 13
+    var mcNearbyServiceAdvertiser: MCNearbyServiceAdvertiser?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -59,9 +60,13 @@ class ViewController: UICollectionViewController {
     }
 
     func startHosting(action: UIAlertAction) {
-        guard let mcSession = mcSession else { return }
-        mcAdvertiserAssistant = MCAdvertiserAssistant(serviceType: "hws-project25", discoveryInfo: nil, session: mcSession)
-        mcAdvertiserAssistant?.start()
+        // Not working in iOS 13
+//        guard let mcSession = mcSession else { return }
+//        mcAdvertiserAssistant = MCAdvertiserAssistant(serviceType: "hws-project25", discoveryInfo: nil, session: mcSession)
+//        mcAdvertiserAssistant?.start()
+        mcNearbyServiceAdvertiser = MCNearbyServiceAdvertiser(peer: peerID, discoveryInfo: nil, serviceType: "hws-project25")
+        mcNearbyServiceAdvertiser?.delegate = self
+        mcNearbyServiceAdvertiser?.startAdvertisingPeer()
     }
 
     func joinSession(action: UIAlertAction) {
@@ -141,5 +146,11 @@ extension ViewController: MCBrowserViewControllerDelegate {
 
     func browserViewControllerWasCancelled(_ browserViewController: MCBrowserViewController) {
         dismiss(animated: true)
+    }
+}
+
+extension ViewController: MCNearbyServiceAdvertiserDelegate {
+    func advertiser(_ advertiser: MCNearbyServiceAdvertiser, didReceiveInvitationFromPeer peerID: MCPeerID, withContext context: Data?, invitationHandler: @escaping (Bool, MCSession?) -> Void) {
+        invitationHandler(true, mcSession)
     }
 }
