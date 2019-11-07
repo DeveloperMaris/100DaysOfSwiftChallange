@@ -18,16 +18,25 @@ class ViewController: UIViewController {
     var shareButton: UIBarButtonItem!
 
     var selectedImage: UIImage?
+    var topText: String?
+    var bottomText: String?
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        navigationController?.isToolbarHidden = false
+
         shareButton = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(shareTapped))
         shareButton.isEnabled = false
-        
-        navigationItem.rightBarButtonItems = [
-            UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(promptImageSelection)),
-            shareButton
+
+        navigationItem.rightBarButtonItem = shareButton
+
+        toolbarItems = [
+            UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil),
+            UIBarButtonItem(title: "Import picture", style: .plain, target: self, action: #selector(promptImageSelection)),
+            UIBarButtonItem(title: "Set top text", style: .plain, target: self, action: #selector(askForTopText)),
+            UIBarButtonItem(title: "Set bottom text", style: .plain, target: self, action: #selector(askForBottomText)),
+            UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
         ]
     }
 
@@ -47,26 +56,36 @@ class ViewController: UIViewController {
         present(activity, animated: true)
     }
 
-    private func askForText(at position: TextPosition, completion: @escaping (String?) -> Void) {
-        let title: String
-
-        switch position {
-        case .top:
-            title = "Enter text for the top."
-        case .bottom:
-            title = "Enter text for the bottom."
+    @objc
+    private func askForTopText() {
+        askForText(withTitle: "Enter text for the top.") { [weak self] text in
+            self?.topText = text
+            self?.createMeme()
         }
+    }
 
+    @objc
+    private func askForBottomText() {
+        askForText(withTitle: "Enter text for the bottom.") { [weak self] text in
+            self?.bottomText = text
+            self?.createMeme()
+        }
+    }
+
+    private func askForText(withTitle title: String, completion: @escaping (String?) -> Void) {
         let ac = UIAlertController(title: title, message: nil, preferredStyle: .alert)
         ac.addTextField()
         ac.addAction(UIAlertAction(title: "OK", style: .default) { [weak ac] _ in
             guard let text = ac?.textFields?.first?.text else { return }
             completion(text)
         })
-        ac.addAction(UIAlertAction(title: "Cancel", style: .cancel) { _ in
-            completion(nil)
-        })
+        ac.addAction(UIAlertAction(title: "Cancel", style: .cancel))
         present(ac, animated: true)
+    }
+
+    private func createMeme() {
+        guard let image = self.selectedImage else { return }
+        draw(textAtTop: topText, textAtBottom: bottomText, on: image)
     }
 
     private func draw(textAtTop topText: String?, textAtBottom bottomText: String?, on image: UIImage) {
@@ -87,7 +106,9 @@ class ViewController: UIViewController {
                 .font: UIFont.boldSystemFont(ofSize: 45),
                 .paragraphStyle: paragraphStyle,
                 .foregroundColor: UIColor.white,
-                .shadow: shadow
+//                .shadow: shadow
+                .strokeColor: UIColor.black,
+                .strokeWidth: -3
             ]
 
             let options: NSStringDrawingOptions = .usesLineFragmentOrigin
@@ -115,13 +136,6 @@ extension ViewController: UIImagePickerControllerDelegate, UINavigationControlle
         guard let image = info[.editedImage] as? UIImage else { return }
         dismiss(animated: true)
         selectedImage = image
-        imageView.image = image
-
-        askForText(at: .top) { [weak self] topText in
-            self?.askForText(at: .bottom) { bottomText in
-                guard topText != nil || bottomText != nil else { return }
-                self?.draw(textAtTop: topText, textAtBottom: bottomText, on: image)
-            }
-        }
+        createMeme()
     }
 }
