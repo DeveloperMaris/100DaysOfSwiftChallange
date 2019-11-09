@@ -20,9 +20,32 @@ class GameScene: SKScene {
     var buildings = [BuildingNode]()
     var player1: SKSpriteNode!
     var player2: SKSpriteNode!
+    var player1ScoreLabel: SKLabelNode!
+    var player2ScoreLabel: SKLabelNode!
     var banana: SKSpriteNode!
 
     var currentPlayer = 1
+    var player1Score = 0 {
+        didSet {
+            player1ScoreLabel?.text = "Score: \(player1Score)"
+        }
+    }
+    var player2Score = 0 {
+        didSet {
+            player2ScoreLabel?.text = "Score: \(player2Score)"
+        }
+    }
+    var wind: CGFloat = 0.0 {
+        didSet {
+            if wind < 0 {
+                viewController?.windLabel.text = "Wind: < \(abs(wind)) m/s"
+            } else if wind > 0 {
+                viewController?.windLabel.text = "Wind: > \(abs(wind)) m/s"
+            } else {
+                viewController?.windLabel.text = "No wind"
+            }
+        }
+    }
 
     override func didMove(to view: SKView) {
         physicsWorld.contactDelegate = self
@@ -30,6 +53,9 @@ class GameScene: SKScene {
         backgroundColor = UIColor(hue: 0.669, saturation: 0.99, brightness: 0.67, alpha: 1)
         createBuildings()
         createPlayers()
+        createPlayersScore()
+
+        updateWind()
     }
 
     override func update(_ currentTime: TimeInterval) {
@@ -128,6 +154,22 @@ class GameScene: SKScene {
         addChild(player2)
     }
 
+    func createPlayersScore() {
+        player1ScoreLabel = SKLabelNode(fontNamed: "Chalkduster")
+        player1ScoreLabel.text = "Score: \(player1Score)"
+        player1ScoreLabel.fontSize = 36
+        player1ScoreLabel.position = CGPoint(x: 20, y: size.height - 120)
+        player1ScoreLabel.horizontalAlignmentMode = .left
+        addChild(player1ScoreLabel)
+
+        player2ScoreLabel = SKLabelNode(fontNamed: "Chalkduster")
+        player2ScoreLabel.text = "Score: \(player2Score)"
+        player2ScoreLabel.fontSize = 36
+        player2ScoreLabel.position = CGPoint(x: size.width - 20, y: size.height - 120)
+        player2ScoreLabel.horizontalAlignmentMode = .right
+        addChild(player2ScoreLabel)
+    }
+
     func deg2rad(degrees: Int) -> Double {
         return Double(degrees) * .pi / 180 // Math formula to convert Degrees in Radians
     }
@@ -141,17 +183,7 @@ class GameScene: SKScene {
         player.removeFromParent()
         banana.removeFromParent()
 
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-            let newGame = GameScene(size: self.size)
-            newGame.viewController = self.viewController
-            self.viewController?.currentGame = newGame
-
-            self.changePlayer()
-            newGame.currentPlayer = self.currentPlayer
-
-            let transition = SKTransition.doorway(withDuration: 1.5)
-            self.view?.presentScene(newGame, transition: transition)
-        }
+        endRound()
     }
 
     func bananaHit(building: SKNode, atPoint contactPoint: CGPoint) {
@@ -179,6 +211,51 @@ class GameScene: SKScene {
         }
 
         viewController?.activatePlayer(number: currentPlayer)
+    }
+
+    func updatePlayerScore() {
+        if player1.parent == nil {
+            player2Score += 1
+        } else {
+            player1Score += 1
+        }
+    }
+
+    func updateWind() {
+        wind = CGFloat(Int.random(in: -3...3))
+        physicsWorld.gravity = CGVector(dx: wind, dy: -9.8)
+    }
+
+    func endRound() {
+        let winningScore = 3
+        updatePlayerScore()
+
+        let scaleUp = SKAction.scale(by: 1.25, duration: 1)
+        let scaleDown = SKAction.scale(by: 0.8, duration: 1)
+        let sequence = SKAction.sequence([scaleUp, scaleDown])
+        let repeatSequence = SKAction.repeatForever(sequence)
+
+        if player1Score == winningScore {
+            player1ScoreLabel.run(repeatSequence)
+        } else if player2Score == winningScore {
+            player2ScoreLabel.run(repeatSequence)
+        } else {
+            // New round
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                let newGame = GameScene(size: self.size)
+                newGame.viewController = self.viewController
+                self.viewController?.currentGame = newGame
+
+                self.changePlayer()
+                newGame.currentPlayer = self.currentPlayer
+
+                newGame.player1Score = self.player1Score
+                newGame.player2Score = self.player2Score
+
+                let transition = SKTransition.doorway(withDuration: 1.5)
+                self.view?.presentScene(newGame, transition: transition)
+            }
+        }
     }
 }
 

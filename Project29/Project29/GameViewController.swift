@@ -17,7 +17,8 @@ class GameViewController: UIViewController {
     @IBOutlet var velocityLabel: UILabel!
     @IBOutlet var launchButton: UIButton!
     @IBOutlet var playerNumber: UILabel!
-
+    @IBOutlet var windLabel: UILabel!
+    
     var currentGame: GameScene?
 
     override func viewDidLoad() {
@@ -28,12 +29,12 @@ class GameViewController: UIViewController {
             if let scene = SKScene(fileNamed: "GameScene") {
                 // Set the scale mode to scale to fit the window
                 scene.scaleMode = .aspectFill
-                
-                // Present the scene
-                view.presentScene(scene)
 
                 currentGame = scene as? GameScene
                 currentGame?.viewController = self
+                
+                // Present the scene
+                view.presentScene(scene)
             }
             
             view.ignoresSiblingOrder = true
