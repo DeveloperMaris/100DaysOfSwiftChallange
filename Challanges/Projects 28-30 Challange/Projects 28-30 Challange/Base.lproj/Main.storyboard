@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15400" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="ipad9_7" orientation="landscape" layout="fullscreen" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15404"/>
+        <capability name="collection view cell content view" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--View Controller-->
+        <scene sceneID="psZ-hY-8XX">
+            <objects>
+                <collectionViewController storyboardIdentifier="ViewController" id="grG-eS-lFK" customClass="ViewController" customModule="Projects_28_30_Challange" customModuleProvider="target" sceneMemberID="viewController">
+                    <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="8K1-qJ-Laq">
+                        <rect key="frame" x="0.0" y="0.0" width="1024" height="768"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="Uc3-wU-Y4J">
+                            <size key="itemSize" width="200" height="150"/>
+                            <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                            <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                            <inset key="sectionInset" minX="20" minY="20" maxX="20" maxY="20"/>
+                        </collectionViewFlowLayout>
+                        <cells>
+                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" reuseIdentifier="FlipCard" id="Po2-aV-dgw" customClass="FlipCardCollectionViewCell" customModule="Projects_28_30_Challange" customModuleProvider="target">
+                                <rect key="frame" x="20" y="20" width="200" height="150"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="Hjx-vy-k0j">
+                                    <rect key="frame" x="0.0" y="0.0" width="200" height="150"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" tag="2" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Nwy-NV-l1i">
+                                            <rect key="frame" x="0.0" y="0.0" width="200" height="150"/>
+                                        </imageView>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstItem="Nwy-NV-l1i" firstAttribute="top" secondItem="Hjx-vy-k0j" secondAttribute="top" id="P3s-mG-0ua"/>
+                                        <constraint firstAttribute="bottom" secondItem="Nwy-NV-l1i" secondAttribute="bottom" id="YcH-mP-9An"/>
+                                        <constraint firstItem="Nwy-NV-l1i" firstAttribute="leading" secondItem="Hjx-vy-k0j" secondAttribute="leading" id="nGJ-2h-MHm"/>
+                                        <constraint firstAttribute="trailing" secondItem="Nwy-NV-l1i" secondAttribute="trailing" id="rNP-Lf-pvn"/>
+                                    </constraints>
+                                </collectionViewCellContentView>
+                                <connections>
+                                    <outlet property="imageView" destination="Nwy-NV-l1i" id="ido-09-Dyk"/>
+                                </connections>
+                            </collectionViewCell>
+                        </cells>
+                        <connections>
+                            <outlet property="dataSource" destination="grG-eS-lFK" id="Ptd-U2-6el"/>
+                            <outlet property="delegate" destination="grG-eS-lFK" id="4xd-us-njw"/>
+                        </connections>
+                    </collectionView>
+                </collectionViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="8aL-fA-MsK" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="320" y="143"/>
+        </scene>
+    </scenes>
+</document>
